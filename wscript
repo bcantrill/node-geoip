@@ -11,7 +11,8 @@ def set_options(opt):
 def configure(conf):
     conf.check_tool('compiler_cxx')
     conf.check_tool('node_addon')
-    conf.check_cxx(lib='GeoIP', mandatory=True, uselib_store='GeoIP')
+    conf.check_cxx(lib='GeoIP', mandatory=True, uselib_store='GeoIP',
+      libpath=['/lib', '/usr/lib', '/usr/local/lib', '/opt/local/lib'])
 
 def build(context, target=target):
     obj = context.new_task_gen('cxx', 'shlib', 'node_addon')
@@ -19,6 +20,7 @@ def build(context, target=target):
     obj.uselib = 'GeoIP'
     obj.source = 'src/ceoip.cc'
     obj.target = target
+    obj.cxxflags = ['-I/opt/local/include']
 
     context.add_post_fun(move_addon)
 
